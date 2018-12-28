@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="900.0" maxWidth="1840.0" minHeight="900.0" minWidth="1840.0" prefHeight="900.0" prefWidth="1840.0" stylesheets="@Mainstyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hulubrothers.controller" />

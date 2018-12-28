@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FinalProject:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FinalProject_jar</output-path>
+    <root id="archive" name="FinalProject.jar">
+      <element id="module-output" name="FinalProject" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/final/JAVE/1.0.2/JAVE-1.0.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
