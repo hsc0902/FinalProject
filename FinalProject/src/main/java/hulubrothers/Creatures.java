@@ -167,11 +167,6 @@ public class Creatures extends Thread {
         if (!MyWorld.map.isempty[x][y] && MyWorld.map.creatures_in_map[x][y].isliving && camp + MyWorld.map.creatures_in_map[x][y].camp == 1) {
             MyWorld.SetUIVisible(MyWorld.map.creatures_in_map[x][y].id, true);
             MyWorld.EnterAttack();
-            try {
-                sleep(100);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
             while(this.isliving&&MyWorld.map.creatures_in_map[x][y].isliving) {
                 ShowVertical(true);
                 MyWorld.map.creatures_in_map[x][y].UnderAttack(AtkValue);
@@ -184,11 +179,6 @@ public class Creatures extends Thread {
             }
             MyWorld.LeaveAttack();
             MyWorld.SetUIVisible(MyWorld.map.creatures_in_map[x][y].id, false);
-            try {
-                sleep(100);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
             return true;
         } else {
             return false;

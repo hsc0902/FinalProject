@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -43,7 +45,7 @@ public class Main extends Application {
                         world.Clear();
                         root.setStyle("-fx-background-image: url("+"'/image/background_v2.jpg'"+")");
                         world.button.setVisible(true);
-                        world.SetButtonText("请选择葫芦娃的阵型");
+                        world.SetButtonText("数字键1-8选择葫芦娃的阵型，L键战斗回放");
                         FileList.clear();
                         enter_flag = 0;
 
@@ -55,7 +57,7 @@ public class Main extends Application {
                     }
 
                     if (event.getCode() == KeyCode.SPACE && enter_flag == 2) {
-                        world.SetButtonText("Enter键重新开始");
+                        world.SetButtonText("Enter键重新开始,L键保存记录");
                         thread_num = world.getCreaturesNum();
                         mutexi = new Semaphore[thread_num];
                         mutexi[0] = new Semaphore(1);
@@ -101,6 +103,7 @@ public class Main extends Application {
                             readrecord.start();
                             world.LetCreaturesRun(animation);
                             enter_flag = -1;
+                            world.SetButtonText("Enter键重新开始");
                         }
                     }
 
@@ -143,6 +146,17 @@ public class Main extends Application {
                 }
             });
 
+            world.button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                        root.requestFocus();
+
+                    } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                        root.requestFocus();
+                    }
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

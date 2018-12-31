@@ -25,8 +25,9 @@ public class World {
     public Map map; //地图
     public AnchorPane Root;
     public Task<Void> LoadTask;
+    private ImageView BattleScene;
 
-    World (AnchorPane root) {
+    public World (AnchorPane root) {
         try {
             Root = root;
             map = new Map();
@@ -95,13 +96,20 @@ public class World {
     public void Clear() {
         Root.getChildren().clear();
         Root.getChildren().add(button);
+        BattleScene = new ImageView(this.getClass().getResource("/image/background_v3.jpg").toExternalForm());
+        BattleScene.setFitHeight(900);
+        BattleScene.setFitWidth(1840);
+        BattleScene.setX(0);
+        BattleScene.setY(0);
+        BattleScene.setVisible(false);
+        Root.getChildren().add(BattleScene);
         map.Clear();
     }
 
     public void InitializeFormation(int FormationType, int mode, int enter_flag) {
         Formation formation =new Formation();
         if (enter_flag == 0) {
-            SetButtonText("请选择妖精的阵型");
+            SetButtonText("数字键1-8选择妖精的阵型");
             int thread_index = 1;
             for (int i = 0; i < formation.height; i++) {
                 for (int j = 0; j < formation.width; j++) {
@@ -329,6 +337,7 @@ public class World {
                         LoadProgress++;
                     }
                 }
+
                 LoadProgress++;
                 while(LoadProgress<=100) {
                     Thread.sleep(20);
@@ -349,7 +358,8 @@ public class World {
         for(int i=0; i<Main.thread_num; i++) {
             creatures[i].Appearance.setVisible(false);
         }
-        Root.setStyle("-fx-background-image: url("+"'/image/background_v3.jpg'"+")");
+        System.out.println("A");
+        BattleScene.setVisible(true);
         button.setVisible(false);
     }
 
@@ -357,7 +367,7 @@ public class World {
         for(int i=0; i<Main.thread_num; i++) {
             creatures[i].Appearance.setVisible(true);
         }
-        Root.setStyle("-fx-background-image: url("+"'/image/background_v2.jpg'"+")");
+        BattleScene.setVisible(false);
         button.setVisible(true);
     }
 }

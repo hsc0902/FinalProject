@@ -5,7 +5,7 @@ public final class Formation {
     public int formation_num;
     public int height;
     public int width;
-    Formation() {
+    public Formation() {
         height = 9;
         width = 12;
         formation_num = 8;
