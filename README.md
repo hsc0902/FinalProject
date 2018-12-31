@@ -1,4 +1,4 @@
-# FinalProject
+# FinalProject详解
 ## 实验运行
 + 战斗回放的存档位置FinalProject/FinalProject/src/main/resources/record.txt    
 ### 1.
@@ -86,6 +86,7 @@ public class Map {
     public synchronized void Clear() {...}                                    // 地图清空
 }
 ```
++ Map类的Creatures数组存放各生物，运行时分别执行各生物的start()函数，此时Creatures的run方法会动态绑定到各自对象。体现了多态的思想。
 ## World类
 + World类记录了整个葫芦娃世界的信息和方法
 ``` java
@@ -117,6 +118,7 @@ public class World {
     public void LeaveAttack() {}                                                        // 离开战斗界面
 }
 ```
++ world类就是葫芦娃的所处世界，一切事物都在world中。world的方法负责管理世界。
 ## Main类
 + Main类负责用户交互，程序的启动等操作。
 ``` java
@@ -184,3 +186,5 @@ world.button.setOnMouseClicked(new EventHandler<MouseEvent>() {
 ## 文件存取
 + 战斗记录的保存格式为ID 移动信息。由于生物的移动有一定的概率是随机的。所以将移动方向保存。
 + 战斗回访是一个线程，该线程读取记录，并按记录中的ID号，按顺序释放对应生物线程的信号量。生物因此按记录的顺序回访战斗。
+# 面向对象思想
++ 通过本次大实验，真正体会到了以名词构建整个世界的思想。生物，葫芦娃，怪物等等名词及其具备的方法共同负责整个世界的运行。通过面向对象模拟真实世界，这是以前从未接触过的。
