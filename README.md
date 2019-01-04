@@ -1,18 +1,23 @@
-# FinalProject
+# FinalProject详解
 ## 实验运行
++ 战斗回放的存档位置FinalProject/FinalProject/src/main/resources/record.txt    
 ### 1.
-+ 启动程序后，先加载所有的图片资源，load 100%后按回车键开始游戏  
++ 启动程序后，先加载所有的图片资源，load 100%后按回车键开始游戏
+![avatar](加载界面.png)
 ### 2.
 + 每一局游戏开场按L键读取存档并运行。  
 + 否则，先后按数字键1-8选择双方阵型，空格开始战斗。（由于地图大小限制，对某些阵型稍做了修改）
+![avatar](主界面.png)
 ### 3.
 + 战斗过程为回合制。葫芦娃和妖怪每个单位依次行动一次，双方都行动完毕为一个回合。为了实现战斗的随机性，战斗过程中，葫芦娃和妖怪以一定概率随机移动，以一定概率指向敌对阵营较多的方向移动。当前行动目标在攻击范围内（以该目标为中心的正方形攻击范围）发现敌方，则展开战斗，进入战斗界面。
 + 战斗界面的战斗仍为回合制，由攻击单位开始，轮流攻击。伤害数值为攻击力。被攻击的一方血条减少。一方单位死亡后回到游戏主战场。战斗过程加入了攻击音效。
 + 死亡单位留下尸体。留有尸体的地图不能站人。每个尸体存在3回合。3回合结束后尸体消失。其他单位方可进入该地图。
 + 当某一阵营全部死亡后，该局游戏结束。
+![avatar](战斗界面.png)
 ### 4.
 + 游戏结束后按L键保存当前这局的存档。否则该局信息不会保存。
 + 按回车键开始下一局。
+![avatar](保存界面.png)
 ## 实验框架
 ### 1.Creatures类
 + Creatures类生物类。存放了生物的基本属性和基本方法
@@ -81,6 +86,7 @@ public class Map {
     public synchronized void Clear() {...}                                    // 地图清空
 }
 ```
++ Map类的Creatures数组存放各生物，运行时分别执行各生物的start()函数，此时Creatures的run方法会动态绑定到各自对象。体现了多态的思想。
 ## World类
 + World类记录了整个葫芦娃世界的信息和方法
 ``` java
@@ -112,6 +118,7 @@ public class World {
     public void LeaveAttack() {}                                                        // 离开战斗界面
 }
 ```
++ world类就是葫芦娃的所处世界，一切事物都在world中。world的方法负责管理世界。
 ## Main类
 + Main类负责用户交互，程序的启动等操作。
 ``` java
@@ -125,3 +132,59 @@ public class Main extends Application {
     public static ArrayList<String> FileList = new ArrayList<>();     // 记录信息
 }
 ```
+## 线程调度
++ 由于采用回合制，每一回合每个单位依次行动。所以线程采用了信号量调度。参考操作系统的PV操作。
++ Main中的
+``` java
+public static Semaphore[] mutexi;
+```
++ 存放了信号量数组，当前单位行动时申请自己的信号量，当获得信号量后开始自己的回合。回合结束释放下一个行动单位的信号量。使得下一单位行动。  
++ 信号量初始如下：每一单位的信号量均初始为0，只有第一个行动的单位信号量初始为1。
+``` java
+thread_num = world.getCreaturesNum();                 // 根据生物体个数获取线程号
+mutexi = new Semaphore[thread_num];                   // 初始化信号量
+mutexi[0] = new Semaphore(1);
+for (int i = 1; i <= thread_num - 1; i++)
+    mutexi[i] = new Semaphore(0);
+```
+``` java
+try {
+    Main.mutexi[id].acquire();                        // 申请当前信号量
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+//自己回合的行动
+Main.mutexi[(id + 1) % Main.thread_num].release();    // 释放下一单位信号量
+```
+## Javafx
++ javafx使用了AnchorPane, 加载fxml文件初始化界面。
++ 所有的生物的移动均使用了Animation动画。生物体的外形是一个ImageView类型的图片。生物移动坐标变化。图片利用动画移动。
+``` java
+javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+path.getElements().add(new MoveTo(from_x, from_y));
+path.getElements().add(new LineTo(to_x, to_y));
+PathTransition pt = new PathTransition();
+pt.setDuration(Duration.millis(speed));
+pt.setPath(path);
+pt.setNode(image);
+pt.setAutoReverse(false);
+pt.play();
+```
++ 用户交互实现了javafx的键盘和鼠标事件。
+``` java
+world.button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+    @Override
+    public void handle(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            root.requestFocus();
+        } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            root.requestFocus();
+        }
+    }
+});
+```
+## 文件存取
++ 战斗记录的保存格式为ID 移动信息。由于生物的移动有一定的概率是随机的。所以将移动方向保存。
++ 战斗回访是一个线程，该线程读取记录，并按记录中的ID号，按顺序释放对应生物线程的信号量。生物因此按记录的顺序回访战斗。
+# 面向对象思想
++ 通过本次大实验，真正体会到了以名词构建整个世界的思想。生物，葫芦娃，怪物等等名词及其具备的方法共同负责整个世界的运行。通过面向对象模拟真实世界，这是以前从未接触过的。
