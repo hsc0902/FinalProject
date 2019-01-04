@@ -26,8 +26,8 @@ public class Map {
                 point_of_map[i][j]=new Point();
             }
         }
-        point_of_map[0][0].setX(508);
-        point_of_map[0][0].setY(280);
+        point_of_map[0][0].setX(335);
+        point_of_map[0][0].setY(184);
         for(int i=0; i<height; i++) {
             for (int j=0; j<width; j++) {
                 creatures_in_map[i][j]=null;
@@ -38,10 +38,10 @@ public class Map {
                 }
                 else if(i>0&&j==0) {
                     point_of_map[i][j].setX(point_of_map[i-1][j].X());
-                    point_of_map[i][j].setY(point_of_map[i-1][j].Y()+62);
+                    point_of_map[i][j].setY(point_of_map[i-1][j].Y()+42);
                 }
                 else if(i==0&&j>0) {
-                    point_of_map[i][j].setX(point_of_map[i][j-1].X()+73);
+                    point_of_map[i][j].setX(point_of_map[i][j-1].X()+47);
                     point_of_map[i][j].setY(point_of_map[i][j-1].Y());
                 }
              }

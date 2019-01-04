@@ -72,6 +72,10 @@ public class World {
         for (int i = 0; i < CreaturesNum; i++) {
             HPProgressBar[i] = new ColoredProgressBar("red-bar", 1);
             MPProgressBar[i] = new ColoredProgressBar("blue-bar", 1);
+            HPProgressBar[i].setMinHeight(17);
+            MPProgressBar[i].setMinHeight(17);
+            HPProgressBar[i].setMaxHeight(20);
+            MPProgressBar[i].setMaxHeight(20);
             if(i<=7) {
                 HPProgressBar[i].setPrefSize(Integer.parseInt(properties.getProperty("WidthHPProgressBar" + "0")), Integer.parseInt(properties.getProperty("HeightHPProgressBar" + "0")));
                 HPProgressBar[i].setLayoutX(Integer.parseInt(properties.getProperty("LayoutXHPProgressBar" + "0")));
@@ -243,13 +247,13 @@ public class World {
 
     public void LoadAllImage () {
         ProgressBar LoadBar = new ProgressBar(0);
-        LoadBar.setPrefSize(1500,30);
-        LoadBar.setLayoutY(850);
-        LoadBar.setLayoutX(170);
+        LoadBar.setPrefSize(1000,30);
+        LoadBar.setLayoutY(550);
+        LoadBar.setLayoutX(100);
         Label LoadLabel = new Label("Loading...0%");
         LoadLabel.setFont(new Font(20));
-        LoadLabel.setLayoutY(850);
-        LoadLabel.setLayoutX(850);
+        LoadLabel.setLayoutY(550);
+        LoadLabel.setLayoutX(520);
         Root.getChildren().add(LoadBar);
         Root.getChildren().add(LoadLabel);
 
